@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Cesium View and Rotate</title>
+  <title>Cesium Globe with Rotation</title>
   <script src="https://cesium.com/downloads/cesiumjs/releases/1.118/Build/Cesium/Cesium.js"></script>
   <link href="https://cesium.com/downloads/cesiumjs/releases/1.118/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
   <style>
@@ -14,24 +14,32 @@
 <body>
   <div id="cesiumContainer"></div>
   <script>
-    const latitude = 37.5665;
+    const latitude = 37.5665;     // 서울
     const longitude = 126.9780;
 
+    // 확실하게 imageryProvider 명시
     const viewer = new Cesium.Viewer("cesiumContainer", {
-      terrainProvider: new Cesium.EllipsoidTerrainProvider(),
-      imageryProvider: new Cesium.BingMapsImageryProvider({
-        url: "https://dev.virtualearth.net",
-        key: "", // Bing 기본 키 사용
-        mapStyle: Cesium.BingMapsStyle.AERIAL_WITH_LABELS
+      imageryProvider: new Cesium.OpenStreetMapImageryProvider({
+        url: 'https://a.tile.openstreetmap.org/'
       }),
+      terrainProvider: new Cesium.EllipsoidTerrainProvider(),
       baseLayerPicker: false,
+      geocoder: false,
+      homeButton: false,
+      sceneModePicker: false,
+      navigationHelpButton: false,
+      animation: false,
+      timeline: false,
+      fullscreenButton: false,
       shouldAnimate: true
     });
 
+    // 초기 뷰: 북반구 전체
     viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(0, 45, 20000000),
+      destination: Cesium.Cartesian3.fromDegrees(0, 45, 20000000)
     });
 
+    // 타겟 좌표로 이동
     setTimeout(() => {
       viewer.camera.flyTo({
         destination: Cesium.Cartesian3.fromDegrees(longitude, latitude, 10000),
@@ -48,12 +56,14 @@
       const camera = scene.camera;
       const center = Cesium.Cartesian3.fromDegrees(longitude, latitude, 0);
       const transform = Cesium.Transforms.eastNorthUpToFixedFrame(center);
-      const orbitRate = Cesium.Math.toRadians(0.005); // 👈 속도 줄이기
+
+      const orbitRate = Cesium.Math.toRadians(0.003); // 천천히 회전
       const matrix = Cesium.Matrix4.fromRotationTranslation(
         Cesium.Matrix3.fromRotationZ(orbitRate)
       );
 
       Cesium.Matrix4.multiplyTransformation(transform, matrix, transform);
+
       const offset = Cesium.Cartesian3.subtract(camera.position, center, new Cesium.Cartesian3());
       Cesium.Matrix4.multiplyByPoint(transform, offset, offset);
       const newPosition = Cesium.Cartesian3.add(center, offset, new Cesium.Cartesian3());
