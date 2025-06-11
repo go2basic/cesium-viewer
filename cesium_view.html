@@ -20,7 +20,19 @@
     <script>
         Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiMmM0MzUxOS05ZWUxLTRjNDktYTI0OS1kMTM1ZDdmZTczNGYiLCJpZCI6MjY3ODA5LCJpYXQiOjE3MzYzOTkzMzl9.hSQA00OhA3Plpl6ZMauHH9xupKpJpVGioDXMFxVIUVw";
 
-        const viewer = new Cesium.Viewer("cesiumContainer");
+        const viewer = new Cesium.Viewer("cesiumContainer", {
+            animation: false,          // 하단 좌측 애니메이션 타이밍 바
+            timeline: false,           // 하단 타임라인
+            homeButton: false,         // 우측 상단 홈 버튼
+            sceneModePicker: false,    // 우측 상단 2D/3D/Columbus view 전환
+            baseLayerPicker: false,    // 우측 상단 베이스맵 선택
+            navigationHelpButton: false, // 우측 상단 물음표 버튼
+            fullscreenButton: false,   // 우측 상단 전체화면 버튼
+            geocoder: false,           // 좌측 상단 검색 창
+            infoBox: false,            // Entity 정보 박스
+            selectionIndicator: false, // 선택 시 인디케이터
+            vrButton: false,           // VR 버튼 (있을 경우)
+        });
 
         (async function () {
             try {
