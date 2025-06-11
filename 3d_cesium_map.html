@@ -14,22 +14,24 @@
 <body>
   <div id="cesiumContainer"></div>
   <script>
-    // 📍 변수로 사용할 위도와 경도
-    const latitude = 37.5665;     // 예: 서울 위도
-    const longitude = 126.9780;   // 예: 서울 경도
-    const height = 20000000;      // 초기 높이 (지구 반 정도 보기)
+    // 위경도 설정
+    const latitude = 37.5665;     // 서울 위도
+    const longitude = 126.9780;   // 서울 경도
 
+    // Cesium Ion 토큰 없이 기본 Viewer 사용
     const viewer = new Cesium.Viewer("cesiumContainer", {
-      terrainProvider: Cesium.createWorldTerrain(),
-      shouldAnimate: true,
+      terrainProvider: new Cesium.EllipsoidTerrainProvider(), // 기본 지형
+      imageryProvider: new Cesium.IonImageryProvider({ assetId: 2 }), // Bing Maps (기본 제공)
+      baseLayerPicker: false,
+      shouldAnimate: true
     });
 
-    // 🌍 초기 카메라: 상반구 전체 보기
+    // 초기 뷰 설정: 북반구 전체 보기
     viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(0, 45, height),
+      destination: Cesium.Cartesian3.fromDegrees(0, 45, 20000000),
     });
 
-    // ⏳ 2초 후에 위경도로 이동
+    // 위경도 위치로 카메라 이동 후 회전
     setTimeout(() => {
       viewer.camera.flyTo({
         destination: Cesium.Cartesian3.fromDegrees(longitude, latitude, 10000),
@@ -38,25 +40,21 @@
       });
     }, 2000);
 
-    // 🔄 회전 애니메이션
+    // 회전 시작
     function startRotation() {
-      viewer.clock.shouldAnimate = true;
       viewer.scene.postUpdate.addEventListener(rotateAroundPoint);
     }
 
     function rotateAroundPoint(scene, time) {
       const camera = scene.camera;
       const center = Cesium.Cartesian3.fromDegrees(longitude, latitude, 0);
-
-      // 현재 카메라 위치를 기준으로 회전
       const transform = Cesium.Transforms.eastNorthUpToFixedFrame(center);
-      const orbitRate = Cesium.Math.toRadians(0.05);  // 속도 조절
+      const orbitRate = Cesium.Math.toRadians(0.05);
       const matrix = Cesium.Matrix4.fromRotationTranslation(
         Cesium.Matrix3.fromRotationZ(orbitRate)
       );
 
       Cesium.Matrix4.multiplyTransformation(transform, matrix, transform);
-
       const offset = Cesium.Cartesian3.subtract(camera.position, center, new Cesium.Cartesian3());
       Cesium.Matrix4.multiplyByPoint(transform, offset, offset);
 
