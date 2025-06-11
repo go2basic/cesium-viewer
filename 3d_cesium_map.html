@@ -14,28 +14,24 @@
 <body>
   <div id="cesiumContainer"></div>
   <script>
-    // 위경도 설정
-    const latitude = 37.5665;     // 서울 위도
-    const longitude = 126.9780;   // 서울 경도
+    const latitude = 37.5665;
+    const longitude = 126.9780;
 
-    // Cesium Ion 토큰 없이 기본 Viewer 사용
     const viewer = new Cesium.Viewer("cesiumContainer", {
-      terrainProvider: new Cesium.EllipsoidTerrainProvider(), // 기본 지형
+      terrainProvider: new Cesium.EllipsoidTerrainProvider(),
       imageryProvider: new Cesium.BingMapsImageryProvider({
         url: "https://dev.virtualearth.net",
-        key: "", // 비워도 Bing 기본 키 사용됨
-        mapStyle: Cesium.BingMapsStyle.AERIAL
-      }), // Bing Maps (기본 제공)
+        key: "", // Bing 기본 키 사용
+        mapStyle: Cesium.BingMapsStyle.AERIAL_WITH_LABELS
+      }),
       baseLayerPicker: false,
       shouldAnimate: true
     });
 
-    // 초기 뷰 설정: 북반구 전체 보기
     viewer.camera.setView({
       destination: Cesium.Cartesian3.fromDegrees(0, 45, 20000000),
     });
 
-    // 위경도 위치로 카메라 이동 후 회전
     setTimeout(() => {
       viewer.camera.flyTo({
         destination: Cesium.Cartesian3.fromDegrees(longitude, latitude, 10000),
@@ -44,7 +40,6 @@
       });
     }, 2000);
 
-    // 회전 시작
     function startRotation() {
       viewer.scene.postUpdate.addEventListener(rotateAroundPoint);
     }
@@ -53,7 +48,7 @@
       const camera = scene.camera;
       const center = Cesium.Cartesian3.fromDegrees(longitude, latitude, 0);
       const transform = Cesium.Transforms.eastNorthUpToFixedFrame(center);
-      const orbitRate = Cesium.Math.toRadians(0.05);
+      const orbitRate = Cesium.Math.toRadians(0.005); // 👈 속도 줄이기
       const matrix = Cesium.Matrix4.fromRotationTranslation(
         Cesium.Matrix3.fromRotationZ(orbitRate)
       );
@@ -61,8 +56,8 @@
       Cesium.Matrix4.multiplyTransformation(transform, matrix, transform);
       const offset = Cesium.Cartesian3.subtract(camera.position, center, new Cesium.Cartesian3());
       Cesium.Matrix4.multiplyByPoint(transform, offset, offset);
-
       const newPosition = Cesium.Cartesian3.add(center, offset, new Cesium.Cartesian3());
+
       camera.lookAt(center, offset);
     }
   </script>
