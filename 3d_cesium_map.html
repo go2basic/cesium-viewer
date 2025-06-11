@@ -21,7 +21,11 @@
     // Cesium Ion 토큰 없이 기본 Viewer 사용
     const viewer = new Cesium.Viewer("cesiumContainer", {
       terrainProvider: new Cesium.EllipsoidTerrainProvider(), // 기본 지형
-      imageryProvider: new Cesium.IonImageryProvider({ assetId: 2 }), // Bing Maps (기본 제공)
+      imageryProvider: new Cesium.BingMapsImageryProvider({
+        url: "https://dev.virtualearth.net",
+        key: "", // 비워도 Bing 기본 키 사용됨
+        mapStyle: Cesium.BingMapsStyle.AERIAL
+      }), // Bing Maps (기본 제공)
       baseLayerPicker: false,
       shouldAnimate: true
     });
