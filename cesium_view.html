@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cesium Globe</title>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.125/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.125/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #container {
+            display: flex;
+            height: 100vh;
+        }
+        #city-list {
+            width: 20%;
+            background-color: #f4f4f4;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        #cesiumContainer {
+            width: 80%;
+            height: 100%;
+        }
+        .city {
+            cursor: pointer;
+            padding: 8px;
+            border-bottom: 1px solid #ccc;
+        }
+        .city:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="city-list">
+            <div class="city" onclick="moveToCity(37.5665, 126.9780, 1000000)">Seoul</div>
+            <div class="city" onclick="moveToCity(40.7128, -74.0060, 1000000)">New York</div>
+            <div class="city" onclick="moveToCity(48.8566, 2.3522, 1000000)">Paris</div>
+            <div class="city" onclick="moveToCity(35.6895, 139.6917, 1000000)">Tokyo</div>
+            <div class="city" onclick="moveToCity(51.5074, -0.1278, 1000000)">London</div>
+        </div>
+        <div id="cesiumContainer"></div>
+    </div>
+    <script>
+        // Grant CesiumJS access to your ion assets
+        Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiMmM0MzUxOS05ZWUxLTRjNDktYTI0OS1kMTM1ZDdmZTczNGYiLCJpZCI6MjY3ODA5LCJpYXQiOjE3MzYzOTkzMzl9.hSQA00OhA3Plpl6ZMauHH9xupKpJpVGioDXMFxVIUVw";
+
+        const viewer = new Cesium.Viewer("cesiumContainer");
+
+        // IIFE를 사용하여 async 함수 내부에서 await 사용
+        (async function () {
+            try {
+                const imageryLayer = viewer.imageryLayers.addImageryProvider(
+                    await Cesium.IonImageryProvider.fromAssetId(3)
+                );
+                await viewer.zoomTo(imageryLayer);
+            } catch (error) {
+                console.error(error);
+            }
+        })();
+
+
+        function moveToCity(lat, lng, height) {
+            viewer.camera.flyTo({
+                destination: Cesium.Cartesian3.fromDegrees(lng, lat, height),
+                duration: 2
+            });
+        }
+    </script>
+</body>
+</html>
+
