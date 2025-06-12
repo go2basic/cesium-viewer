@@ -49,7 +49,7 @@
           const rotationSpeed = 0.002;
 
           viewer.clock.onTick.addEventListener(() => {
-              viewer.camera.rotate(Cesium.Cartesian3.UNIT_Z, rotationSpeed);
+              viewer.camera.rotateRight(rotationSpeed);  // 카메라 기준 오른쪽 회전
           });
       }
 
