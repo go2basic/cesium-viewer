@@ -42,7 +42,29 @@
           duration: 2
       });
 
+// flyTo 종료 후 한번만 orbit 시작
+const removeListener = viewer.camera.moveEnd.addEventListener(() => {
+    startOrbit();
+    removeListener();
+});
 
+function startOrbit() {
+    const heading = Cesium.Math.toRadians(0);   // flyTo에서 사용한 heading
+    const pitch = Cesium.Math.toRadians(-30);   // flyTo에서 사용한 pitch
+    const range = height;
+
+    viewer.camera.lookAt(
+        center,
+        new Cesium.HeadingPitchRange(heading, pitch, range)
+    );
+
+    const rotationSpeed = 0.002;
+
+    viewer.clock.onTick.addEventListener(() => {
+        viewer.camera.rotateRight(rotationSpeed);  // 중심을 기준으로 오른쪽 회전
+    });
+}
+    
   </script>
  </div>
 </body>
