@@ -44,8 +44,8 @@
       return isNaN(value) ? defaultValue : value;
     }
 
-    const lat = getQueryParam("lat", 16.88139);     // 위도
-    const lng = getQueryParam("lng", 51.01734);     // 경도
+    const lat = getQueryParam("lat", 51.01734);     // 위도
+    const lng = getQueryParam("lng", 16.88139);     // 경도
     const height = getQueryParam("height", 800);    // 고도 (카메라 거리)
 
     const center = Cesium.Cartesian3.fromDegrees(lng, lat, 0);
