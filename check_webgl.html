@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <canvas id="glcanvas" width="640" height="480"></canvas>
+    <script>
+      const canvas = document.getElementById("glcanvas");
+      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      if (gl) {
+        document.body.innerHTML += "<p>✅ WebGL is supported</p>";
+      } else {
+        document.body.innerHTML += "<p>❌ WebGL is NOT supported</p>";
+      }
+    </script>
+  </body>
+</html>
