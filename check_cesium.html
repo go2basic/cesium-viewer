@@ -29,7 +29,7 @@
       const lng = getQueryParam("lng", 51.01734);
       const height = getQueryParam("height", 500);
 
-      const center = Cesium.Cartesian3.fromDegrees(lng, lat, 0);
+      const center = Cesium.Cartesian3.fromDegrees(lat, lng, 0);
     
     // flyTo 완료 후 orbit 시작을 위해 Promise 사용
       viewer.camera.flyTo({
