@@ -42,21 +42,7 @@
           duration: 2
       });
 
-      function startOrbit() {
-          const offset = new Cesium.Cartesian3(0, -height, height * 0.5);
-          viewer.camera.lookAt(center, offset);
 
-          const rotationSpeed = 0.002;
-
-          viewer.clock.onTick.addEventListener(() => {
-              viewer.camera.rotateRight(rotationSpeed);  // 카메라 기준 오른쪽 회전
-          });
-      }
-
-      const removeListener = viewer.camera.moveEnd.addEventListener(() => {
-          startOrbit();
-          removeListener(); // 이벤트 한번만
-      });
   </script>
  </div>
 </body>
