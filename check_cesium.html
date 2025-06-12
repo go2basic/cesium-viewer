@@ -49,15 +49,18 @@ const removeListener = viewer.camera.moveEnd.addEventListener(() => {
 });
 
 function startOrbit() {
-    const heading = Cesium.Math.toRadians(0);   // flyTo에서 사용한 heading
-    const pitch = Cesium.Math.toRadians(-30);   // flyTo에서 사용한 pitch
-    const range = height;
+    // const heading = Cesium.Math.toRadians(0);   // flyTo에서 사용한 heading
+    // const pitch = Cesium.Math.toRadians(-30);   // flyTo에서 사용한 pitch
+    // const range = height;
 
-    viewer.camera.lookAt(
-        center,
-        new Cesium.HeadingPitchRange(heading, pitch, range)
-    );
+    // viewer.camera.lookAt(
+    //     center,
+    //     new Cesium.HeadingPitchRange(heading, pitch, range)
+    // );
 
+    const offset = new Cesium.Cartesian3(0, -height, height * 0.5);
+    viewer.camera.lookAt(center, offset);
+  
     const rotationSpeed = 0.002;
 
     viewer.clock.onTick.addEventListener(() => {
